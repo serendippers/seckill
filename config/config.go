@@ -11,11 +11,11 @@ type MySQL struct {
 	Username     string `json:"username" yml:"username"`
 	Password     string `json:"password" yml:"password"`
 	Path         string `json:"path" yml:"path"`
-	DBName       string `json:"db-name" yml:"db-name"`
+	Database       string `json:"dbName" yml:"database"`
 	Config       string `json:"config" yml:"config"`
-	MaxIdleConns int    `json:"max_idle_conns" yml:"max_idle_conns"`
-	MaxOpenConns int    `json:"max_open_conns" yml:"max_open_conns"`
-	LogMode      bool   `json:"log_mode" yml:"log_mode"`
+	MaxIdleConns int    `json:"maxIdleConns" yml:"max-idle-conns"`
+	MaxOpenConns int    `json:"maxOpenConns" yml:"max-open-conns"`
+	LogMode      bool   `json:"logMode" yml:"log-mode"`
 }
 
 type Redis struct {

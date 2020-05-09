@@ -8,7 +8,7 @@ import (
 
 func BizMysql() {
 	bizConfig := global.CONFIG.MySQL
-	source := bizConfig.Username + ":" + bizConfig.Password + "@(" + bizConfig.Path + ")/" + bizConfig.DBName + "?" + bizConfig.Config
+	source := bizConfig.Username + ":" + bizConfig.Password + "@(" + bizConfig.Path + ")/" + bizConfig.Database + "?" + bizConfig.Config
 	if bizDB, err := gorm.Open("mysql", source); err != nil {
 		global.LOG.Error("DEFAULTDB数据库启动异常", err)
 	} else {

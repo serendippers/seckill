@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"github.com/zheng-ji/goSnowFlake"
 	"net/http"
 	"seckill/core/initialize"
 	"seckill/global"
@@ -11,11 +12,17 @@ import (
 
 func main() {
 
+	iw, _ := goSnowFlake.NewIdWorker(1)
+	i,_:= iw.NextId()
+
+	fmt.Printf("%T, %d", i, i)
 
 	//初始化mysql
 	initialize.BizMysql()
 	//initialize.Redis()
 	engine := initialize.Routers()
+
+	initialize.CreateTables()
 
 
 	defer utils.CrawlerClose()
