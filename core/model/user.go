@@ -7,6 +7,7 @@ import (
 
 type User struct {
 	gorm.Model
+	Phone         string    `json:"phone" gorm:"type:varchar(13);NOT NULL;index:idx_phone;comment:'手机号码'"`
 	Nickname      string    `json:"nickname" gorm:"type:varchar(255); NOT NULL; comment:'昵称'"`
 	Password      string    `json:"-" gorm:"type: varchar(32); DEFAULT NULL; comment:'MD5(MD5(pass明文+固定salt) + salt)'"`
 	Salt          string    `json:"salt" gorm:"type: varchar(10); DEFAULT NULL"`
