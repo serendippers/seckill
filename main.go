@@ -12,13 +12,15 @@ import (
 func main() {
 
 	//初始化mysql
-	initialize.BizMysql()
-	//initialize.Redis()
+	initialize.Mysql()
+	initialize.Redis()
 	engine := initialize.Routers()
 
 	//init goSnowFlake
 	initialize.CreateIdWorker()
-	initialize.CreateTables()
+
+
+	//initialize.CreateTables()
 
 	defer utils.CrawlerClose()
 

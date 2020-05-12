@@ -3,7 +3,7 @@ package model
 import "time"
 
 type SeckillOrder struct {
-	Id        int `json:"id" gorm:"type:int(64)"`
+	Id        int64 `json:"id" gorm:"type:bigint(64)"`
 	CreatedAt time.Time
 	UpdatedAt time.Time
 	DeletedAt *time.Time `sql:"index"`

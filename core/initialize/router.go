@@ -21,7 +21,7 @@ func Routers() *gin.Engine {
 
 	apiGroup := engine.Group("")
 
-	router.InitBaseRouter(apiGroup)
+	router.InitUserRouter(apiGroup)
 
 	global.LOG.Info("router register success")
 

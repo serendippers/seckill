@@ -5,10 +5,11 @@ import (
 	"seckill/core/api"
 )
 
-func InitBaseRouter(apiGroup *gin.RouterGroup) {
-	baseRouter := apiGroup.Group("base")
+func InitUserRouter(apiGroup *gin.RouterGroup) {
+	baseRouter := apiGroup.Group("user")
 	{
 		baseRouter.GET("show", api.Show)
 		baseRouter.POST("register", api.Register)
+		baseRouter.POST("login", api.Login)
 	}
 }
