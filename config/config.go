@@ -5,6 +5,7 @@ type Server struct {
 	Redis    `json:"redis" yml:"redis"`
 	Log      `json:"log" yml:"log"`
 	RoMySQL  `json:"roMysql" yml:"roMysql"`
+	JWT      `json:"jwt" yml:"jwt"`
 }
 
 type BizMySQL struct {
@@ -40,4 +41,8 @@ type Log struct {
 	LogFile bool   `json:"logFile" yaml:"logFile"`
 	Stdout  string `json:"stdout" yaml:"stdout"`
 	File    string `json:"file" yaml:"file"`
+}
+
+type JWT struct {
+	SigningKey string `json:"signingKey" yml:"signingKey"`
 }

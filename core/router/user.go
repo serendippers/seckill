@@ -3,13 +3,12 @@ package router
 import (
 	"github.com/gin-gonic/gin"
 	"seckill/core/api"
+	"seckill/core/middleware"
 )
 
 func InitUserRouter(apiGroup *gin.RouterGroup) {
-	baseRouter := apiGroup.Group("user")
+	baseRouter := apiGroup.Group("user").Use(middleware.JWTAuth())
 	{
-		baseRouter.GET("show", api.Show)
-		baseRouter.POST("register", api.Register)
-		baseRouter.POST("login", api.Login)
+		baseRouter.POST("change_password", api.ChangePassword)
 	}
 }

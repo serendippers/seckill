@@ -13,3 +13,8 @@ type LoginStruct struct {
 	Nickname string `json:"nickname"`
 	Password string `json:"password"`
 }
+
+type ChangePassword struct {
+	Phone       string `json:"phone"`
+	Password string `json:"password"`
+}
