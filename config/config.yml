@@ -1,28 +1,42 @@
-
-
-
 # mysql connect configuration
-mysql:
-  username: ccdr
-  password: 'ccdr'
-  path: '127.0.0.1:3306'
-  database: 'ccdr'
+bizMysql:
+  username: root
+  password: Zpp8.08.
+  path: '39.108.87.83:3306'
+  database: 'seckill'
   config: 'charset=utf8&parseTime=True&loc=Local'
-  max-idle-conns: 10
+  maxIdleConns: 10
+  maxOpenConns: 10
+  logMode: true
+
+roMysql:
+  username: zhangpengpeng
+  password: RO_pass.123
+  path: '39.108.87.83:3306'
+  database: 'seckill'
+  config: 'charset=utf8&parseTime=True&loc=Local'
+  maxIdleConns: 10
   max-open-conns: 10
   log-mode: true
 
 
 # redis configuration
 redis:
-  addr: 'addr:6379'
-  password: 'redis_pass'
+  addr: '39.108.87.83:6379'
+  password: 'Zpp8.08.'
   db: 0
 
 
 # logger configuration
 log:
   prefix: '[seckill]'
-  log-file: true
+  logFile: true
   stdout: 'DEBUG'
   file: 'DEBUG'
+
+# jwt configuration
+jwt:
+  signingKey: 'signingKey'
+
+
+
