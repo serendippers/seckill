@@ -1,8 +1,8 @@
 # mysql connect configuration
 bizMysql:
   username: root
-  password: Zpp8.08.
-  path: '39.108.87.83:3306'
+  password: root
+  path: '0.0.0.0:13306'
   database: 'seckill'
   config: 'charset=utf8&parseTime=True&loc=Local'
   maxIdleConns: 10
@@ -10,20 +10,20 @@ bizMysql:
   logMode: true
 
 roMysql:
-  username: zhangpengpeng
-  password: RO_pass.123
-  path: '39.108.87.83:3306'
+  username: test
+  password: test
+  path: '0.0.0.0:13307'
   database: 'seckill'
   config: 'charset=utf8&parseTime=True&loc=Local'
   maxIdleConns: 10
-  max-open-conns: 10
-  log-mode: true
+  maxOpenConns: 10
+  logMode: true
 
 
 # redis configuration
 redis:
-  addr: '39.108.87.83:6379'
-  password: 'Zpp8.08.'
+  addr: '0.0.0.0:6379'
+  password: '123456'
   db: 0
 
 

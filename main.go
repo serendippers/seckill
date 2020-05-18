@@ -25,14 +25,14 @@ func main() {
 	defer utils.CrawlerClose()
 
 	s := &http.Server{
-		Addr:           "127.0.0.1:8000",
+		Addr:           "0.0.0.0:8000",
 		Handler:        engine,
 		ReadTimeout:    10 * time.Second,
 		WriteTimeout:   10 * time.Second,
 		MaxHeaderBytes: 1 << 20,
 	}
 	time.Sleep(10 * time.Microsecond)
-	global.LOG.Info("server run success on 8080")
+	global.LOG.Info("server run success on 8000")
 
 
 	fmt.Printf("欢迎使用 crawler 默认自动化文档地址:http://%s/swagger/index.html\n", s.Addr)

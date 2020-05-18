@@ -1,0 +1,85 @@
+version: '3'
+services:
+  redis:
+    image: redis:4.0-alpine
+    container_name: docker_redis
+    command: redis-server /usr/local/etc/redis/redis.conf
+    restart: always
+    ports:
+      - "6379:6379"
+    volumes:
+      - "$HOME/docker/redis/conf/redis.conf:/usr/local/etc/redis/redis.conf"
+      - "$HOME/docker/redis/data:/data"
+
+  mysql-master:
+    image: mysql:8.0
+    container_name: docker_mysql_master
+    command:
+      --character-set-server=utf8mb4
+      --collation-server=utf8mb4_general_ci
+      --default-time-zone=+8:00
+    environment:
+      MYSQL_DATABASE: seckill
+      MYSQL_ROOT_PASSWORD: root #root管理员用户密码
+      MYSQL_USER: test   #创建test用户
+      MYSQL_PASSWORD: test  #设置test用户的密码
+    restart: always
+    links:
+      - mysql-slave
+    ports:
+      - "13306:3306"
+    volumes:
+      - "$HOME/docker/mysql_master/data:/var/lib/mysql"
+      - "$HOME/docker/mysql_master/conf/conf.d:/etc/mysql/conf.d"
+      - "$HOME/docker/mysql_master/conf/my.cnf:/etc/my.cnf"
+
+  mysql-slave:
+    image: mysql:8.0
+    container_name: docker_mysql_slave
+    command:
+      --character-set-server=utf8mb4
+      --collation-server=utf8mb4_general_ci
+      --default-time-zone=+8:00
+    environment:
+      MYSQL_DATABASE: seckill
+      MYSQL_ROOT_PASSWORD: root #root管理员用户密码
+      MYSQL_USER: test   #创建test用户
+      MYSQL_PASSWORD: test  #设置test用户的密码
+
+    restart: always
+    ports:
+      - "13307:3306"
+    volumes:
+      - "$HOME/docker/mysql_slave/data:/var/lib/mysql"
+      - "$HOME/docker/mysql_slave/conf/conf.d:/etc/mysql/conf.d"
+      - "$HOME/docker/mysql_slave/conf/my.cnf:/etc/my.cnf"
+#  rabbitmq:
+#    #容器名称
+#    container_name: docker_rabbitmq
+#    #镜像名称
+#    image: rabbitmq:3.7-rc
+#    #总是重启后启动
+#    restart: always
+#    #端口映射
+#    ports:
+#      - 5672:5672
+#      - 15672:15672
+#    #挂载
+#    volumes:
+#      - ./data:/var/lib/rabbitmq
+#    #环境变量
+#    environment:
+#      - RABBITMQ_DEFAULT_VHOST=my_vhost
+#      - RABBITMQ_DEFAULT_USER=admin
+#      - RABBITMQ_DEFAULT_PASS=admin
+
+  web:
+    build: ./
+    image: seckill
+    container_name: docker_seckill
+    command: ./seckill
+    restart: always
+    ports:
+      - "8000:8000"
+    volumes:
+      -  "$HOME/docker/seckill:$HOME/docker/seckill"
