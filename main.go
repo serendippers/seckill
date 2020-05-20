@@ -20,7 +20,7 @@ func main() {
 	initialize.CreateIdWorker()
 
 
-	//initialize.CreateTables()
+	initialize.CreateTables()
 
 	defer utils.CrawlerClose()
 

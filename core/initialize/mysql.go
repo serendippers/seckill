@@ -15,7 +15,7 @@ func BizMysql() {
 	bizConfig := global.CONFIG.BizMySQL
 	source := bizConfig.Username + ":" + bizConfig.Password + "@(" + bizConfig.Path + ")/" + bizConfig.Database + "?" + bizConfig.Config
 	if bizDB, err := gorm.Open("mysql", source); err != nil {
-		global.LOG.Error("BIZ_DB数据库启动异常", err)
+		global.LOG.Error("BIZ_DB数据库启动异常 source is %s",source, err)
 	} else {
 		global.BIZ_DB = bizDB
 		global.BIZ_DB.DB().SetMaxIdleConns(bizConfig.MaxIdleConns)

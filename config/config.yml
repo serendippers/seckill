@@ -1,7 +1,9 @@
 # mysql connect configuration
 bizMysql:
-  username: root
-  password: root
+  username: 'root'
+  password: 'root'
+#  docker for mac下，容器访问宿主机的方式
+#  path: 'docker.for.mac.host.internal:13306'
   path: '0.0.0.0:13306'
   database: 'seckill'
   config: 'charset=utf8&parseTime=True&loc=Local'
@@ -10,9 +12,11 @@ bizMysql:
   logMode: true
 
 roMysql:
-  username: test
-  password: test
+  username: 'test'
+  password: 'test'
   path: '0.0.0.0:13307'
+#  docker for mac下，容器访问宿主机的方式
+#  path: 'docker.for.mac.host.internal:13307'
   database: 'seckill'
   config: 'charset=utf8&parseTime=True&loc=Local'
   maxIdleConns: 10
@@ -22,6 +26,8 @@ roMysql:
 
 # redis configuration
 redis:
+#  docker for mac下，容器访问宿主机的方式
+#  addr: 'docker.for.mac.host.internal:6379'
   addr: '0.0.0.0:6379'
   password: '123456'
   db: 0
