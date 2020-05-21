@@ -14,6 +14,7 @@ func main() {
 	//初始化mysql
 	initialize.Mysql()
 	initialize.Redis()
+	initialize.InitRabbitMQ()
 	engine := initialize.Routers()
 
 	//init goSnowFlake

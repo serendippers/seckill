@@ -15,8 +15,8 @@ import (
 )
 
 const (
-	logDir      = "$HOME/docker/seckill/logs"
-	logSoftLink = "$HOME/docker/seckill/latest_log"
+	logDir      = "log"
+	logSoftLink = "latest_log"
 	module      = "seckill"
 )
 

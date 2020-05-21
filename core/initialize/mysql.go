@@ -21,6 +21,7 @@ func BizMysql() {
 		global.BIZ_DB.DB().SetMaxIdleConns(bizConfig.MaxIdleConns)
 		global.BIZ_DB.DB().SetMaxOpenConns(bizConfig.MaxOpenConns)
 		global.BIZ_DB.LogMode(bizConfig.LogMode)
+		global.LOG.Info("连接BIZ_DB数据库：success")
 	}
 }
 
@@ -34,5 +35,6 @@ func RoMysql()  {
 		global.RO_DB.DB().SetMaxIdleConns(roConfig.MaxIdleConns)
 		global.RO_DB.DB().SetMaxOpenConns(roConfig.MaxOpenConns)
 		global.RO_DB.LogMode(roConfig.LogMode)
+		global.LOG.Info("连接RO_DB数据库：success")
 	}
 }

@@ -5,6 +5,7 @@ import (
 	"github.com/jinzhu/gorm"
 	"github.com/op/go-logging"
 	"github.com/spf13/viper"
+	"github.com/streadway/amqp"
 	"github.com/zheng-ji/goSnowFlake"
 	"seckill/config"
 )
@@ -17,4 +18,5 @@ var (
 	LOG      *logging.Logger
 	VIPER    *viper.Viper
 	IdWorker *goSnowFlake.IdWorker
+	MQ       *amqp.Connection
 )

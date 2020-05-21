@@ -1,23 +1,22 @@
 version: '3'
 services:
-  web:
-    build: ./
-    image: seckill
-    container_name: docker_seckill
-    command: ./seckill
-    restart: always
-    ports:
-      - "8000:8000"
-    volumes:
-      - "$HOME/docker/seckill:$HOME/docker/seckill"
-    depends_on:
-      - mysql-master
-#      - mysql-slave
-      - redis
-#    links:
+#  web:
+#    build: ./
+#    image: seckill
+#    container_name: docker_seckill
+#    command: ./seckill
+#    restart: always
+#    ports:
+#      - "8000:8000"
+#    volumes:
+#      - "$HOME/docker/seckill:/app/seckill"
+#    networks:
+#      - net-seckill
+#    depends_on:
 #      - mysql-master
 #      - mysql-slave
 #      - redis
+
 
   redis:
     image: redis:4.0-alpine
@@ -29,16 +28,18 @@ services:
     volumes:
       - "$HOME/docker/redis/conf/redis.conf:/usr/local/etc/redis/redis.conf"
       - "$HOME/docker/redis/data:/data"
+    networks:
+      - net-seckill
 
   mysql-master:
-    image: mysql:8.0
+    image: mysql:5.7.30
     container_name: docker_mysql_master
     command:
       --character-set-server=utf8mb4
       --collation-server=utf8mb4_general_ci
       --default-time-zone=+8:00
-      --default-authentication-plugin=mysql_native_password
     environment:
+      TZ: Asia/Shanghai
       MYSQL_DATABASE: seckill
       MYSQL_ROOT_PASSWORD: root
       MYSQL_USER: test
@@ -48,19 +49,19 @@ services:
       - "13306:3306"
     volumes:
       - "$HOME/docker/mysql_master/data:/var/lib/mysql"
-      - "$HOME/docker/mysql_master/conf/conf.d:/etc/mysql/conf.d"
-      - "$HOME/docker/mysql_master/conf/my.cnf:/etc/my.cnf"
-      - "$HOME/docker/mysql_master/mysql-files:/var/lib/mysql-files/"
+      - "$HOME/docker/mysql_master/conf/my.cnf:/etc/mysql/my.cnf"
+    networks:
+      - net-seckill
 
   mysql-slave:
-    image: mysql:8.0
+    image: mysql:5.7.30
     container_name: docker_mysql_slave
     command:
       --character-set-server=utf8mb4
       --collation-server=utf8mb4_general_ci
       --default-time-zone=+8:00
-      --default-authentication-plugin=mysql_native_password
     environment:
+      TZ: Asia/Shanghai
       MYSQL_DATABASE: seckill
       MYSQL_ROOT_PASSWORD: root #root管理员用户密码
       MYSQL_USER: test   #创建test用户
@@ -70,27 +71,28 @@ services:
       - "13307:3306"
     volumes:
       - "$HOME/docker/mysql_slave/data:/var/lib/mysql"
-      - "$HOME/docker/mysql_slave/conf/conf.d:/etc/mysql/conf.d"
-      - "$HOME/docker/mysql_slave/conf/my.cnf:/etc/my.cnf"
-      - "$HOME/docker/mysql_master/mysql-files:/var/lib/mysql-files/"
+      - "$HOME/docker/mysql_slave/conf/my.cnf:/etc/mysql/my.cnf"
+    networks:
+      - net-seckill
 
-#  rabbitmq:
-#    #容器名称
-#    container_name: docker_rabbitmq
-#    #镜像名称
-#    image: rabbitmq:3.7-rc
-#    #总是重启后启动
-#    restart: always
-#    #端口映射
-#    ports:
-#      - 5672:5672
-#      - 15672:15672
-#    #挂载
-#    volumes:
-#      - ./data:/var/lib/rabbitmq
-#    #环境变量
-#    environment:
-#      - RABBITMQ_DEFAULT_VHOST=my_vhost
-#      - RABBITMQ_DEFAULT_USER=admin
-#      - RABBITMQ_DEFAULT_PASS=admin
+  rabbitMQ:
+    image: rabbitmq:3.7.8-management
+    hostname: rabbit1
+    container_name: docker_rabbitmq
+    #总是重启后启动
+    restart: always
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    volumes:
+      - "$HOME/docker/rabbitmq/data:/var/lib/rabbitmq"
+    environment:
+      - RABBITMQ_DEFAULT_USER=root
+      - RABBITMQ_DEFAULT_PASS=root
+    networks:
+      - net-seckill
 
+
+networks:
+  net-seckill:
+    driver: bridge

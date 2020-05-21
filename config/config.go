@@ -1,11 +1,12 @@
 package config
 
 type Server struct {
-	BizMySQL `json:"mysql" yml:"bizMysql"`
+	BizMySQL `json:"bizMysql" yml:"bizMysql"`
 	Redis    `json:"redis" yml:"redis"`
 	Log      `json:"log" yml:"log"`
 	RoMySQL  `json:"roMysql" yml:"roMysql"`
 	JWT      `json:"jwt" yml:"jwt"`
+	RabbitMQ `json:"rabbitMQ" yml:"rabbitMQ"`
 }
 
 type BizMySQL struct {
@@ -37,12 +38,16 @@ type Redis struct {
 }
 
 type Log struct {
-	Prefix  string `json:"prefix" yaml:"prefix"`
-	LogFile bool   `json:"logFile" yaml:"logFile"`
-	Stdout  string `json:"stdout" yaml:"stdout"`
-	File    string `json:"file" yaml:"file"`
+	Prefix  string `json:"prefix" yml:"prefix"`
+	LogFile bool   `json:"logFile" yml:"logFile"`
+	Stdout  string `json:"stdout" yml:"stdout"`
+	File    string `json:"file" yml:"file"`
 }
 
 type JWT struct {
 	SigningKey string `json:"signingKey" yml:"signingKey"`
+}
+
+type RabbitMQ struct {
+	Path string `json:"path" yml:"path"`
 }
