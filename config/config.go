@@ -1,12 +1,13 @@
 package config
 
 type Server struct {
-	BizMySQL `json:"bizMysql" yml:"bizMysql"`
-	Redis    `json:"redis" yml:"redis"`
-	Log      `json:"log" yml:"log"`
-	RoMySQL  `json:"roMysql" yml:"roMysql"`
-	JWT      `json:"jwt" yml:"jwt"`
-	RabbitMQ `json:"rabbitMQ" yml:"rabbitMQ"`
+	BizMySQL    `json:"bizMysql" yml:"bizMysql"`
+	Redis       `json:"redis" yml:"redis"`
+	Log         `json:"log" yml:"log"`
+	RoMySQL     `json:"roMysql" yml:"roMysql"`
+	JWT         `json:"jwt" yml:"jwt"`
+	RabbitMQ    `json:"rabbitMQ" yml:"rabbitMQ"`
+	RedisPrefix `json:"redisPrefix" yml:"redisPrefix"`
 }
 
 type BizMySQL struct {
@@ -50,4 +51,8 @@ type JWT struct {
 
 type RabbitMQ struct {
 	Path string `json:"path" yml:"path"`
+}
+
+type RedisPrefix struct {
+	SeckillStock string `json:"seckillStock" yml:"seckillStock"`
 }

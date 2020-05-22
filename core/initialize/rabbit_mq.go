@@ -22,7 +22,6 @@ func InitRabbitMQ() {
 
 
 func TestRabbitMQInit() {
-	global.LOG.Info("global.MQ is %T\n", global.MQ)
 	//创建通道
 	ch, err := global.MQ.Channel()
 	if err != nil {

@@ -68,6 +68,12 @@ func Login(c *gin.Context) {
 	response.OkWithData(resp.UserResponse{User: u, Token: token}, c)
 }
 
+// @Tags user
+// @Summary 用户修改密码
+// @Produce  application/json
+// @Param data body model.User true "用户修改密码接口"
+// @Success 200 {string} string "{"success":true,"data":{},"msg":"修改成功"}"
+// @Router /user/change_password [post]
 func ChangePassword(c *gin.Context) {
 	var params request.ChangePassword
 	_ = c.ShouldBindJSON(&params)
@@ -79,12 +85,16 @@ func ChangePassword(c *gin.Context) {
 	response.Ok(c)
 }
 
+//生成token
 func CreateToken(user model.User) (string, error) {
 	j := middleware.NewJWT()
 
+	//为token设置一个uuId，Golong没有提供uuid的方法，就用生成id的雪花算法替代
+	//uuid用来
 	uuId, _ := global.IdWorker.NextId()
 	clams := request.CustomClaims{
 		UUId:     uuId,
+		UserId:   user.Id,
 		NickName: user.Nickname,
 		Phone:    user.Phone,
 		StandardClaims: jwt.StandardClaims{

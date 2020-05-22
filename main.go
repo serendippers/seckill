@@ -15,6 +15,8 @@ func main() {
 	initialize.Mysql()
 	initialize.Redis()
 	initialize.InitRabbitMQ()
+	//缓存参与秒杀的商品库存
+	initialize.CacheProduct()
 	engine := initialize.Routers()
 
 	//init goSnowFlake

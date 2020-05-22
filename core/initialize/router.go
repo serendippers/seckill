@@ -23,6 +23,9 @@ func Routers() *gin.Engine {
 
 	router.InitBaseRouter(apiGroup)
 	router.InitUserRouter(apiGroup)
+	router.InitProductRouter(apiGroup)
+	router.InitSeckillRouter(apiGroup)
+
 
 	global.LOG.Info("router register success")
 

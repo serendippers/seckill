@@ -38,6 +38,8 @@ redis:
   password: '123456'
   db: 0
 
+redisPrefix:
+  seckillStock: 'seckill:stock:'
 
 # logger configuration
 log:

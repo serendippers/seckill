@@ -7,8 +7,8 @@ import (
 )
 
 func InitUserRouter(apiGroup *gin.RouterGroup) {
-	baseRouter := apiGroup.Group("user").Use(middleware.JWTAuth())
+	userRouter := apiGroup.Group("user").Use(middleware.JWTAuth())
 	{
-		baseRouter.POST("change_password", api.ChangePassword)
+		userRouter.POST("change_password", api.ChangePassword)
 	}
 }
