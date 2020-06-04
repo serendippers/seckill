@@ -36,11 +36,11 @@ func CacheProduct() {
 		global.LOG.Errorf("CacheProduct fail, error is %v/n", err)
 	}
 	for _, v := range list {
-		if v.Stock > 0  {
+		if v.Stock > 0 {
 			expiration := v.EndDate.Sub(v.StartDate) + time.Minute*10
 			key := global.CONFIG.RedisPrefix.SeckillStock + strconv.FormatInt(v.Id, 10)
 			err = global.REDIS.Set(key, v.Stock, expiration).Err()
-			if err!= nil {
+			if err != nil {
 				global.LOG.Error(err)
 			}
 		}

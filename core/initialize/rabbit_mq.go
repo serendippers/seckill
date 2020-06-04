@@ -56,3 +56,7 @@ func TestRabbitMQInit() {
 		global.LOG.Errorf("Failed to publish a message, error is %s\n", err)
 	}
 }
+
+func ExchangeInit()  {
+	
+}

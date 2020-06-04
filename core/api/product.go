@@ -39,6 +39,13 @@ func SeckillProductList(c *gin.Context)  {
 }
 
 func Seckill(c *gin.Context) {
-
+	var orderInfo request.OrderInfo
+	_ = c.ShouldBindJSON(&orderInfo)
+	message, ok := service.Seckill(&orderInfo)
+	if !ok {
+		response.FailWithMessage(message, c)
+	} else {
+		response.OkWithMessage(message, c)
+	}
 
 }

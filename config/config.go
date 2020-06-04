@@ -56,3 +56,8 @@ type RabbitMQ struct {
 type RedisPrefix struct {
 	SeckillStock string `json:"seckillStock" yml:"seckillStock"`
 }
+
+type Exchange struct {
+	Name string `json:"name" yml:"name"`
+
+}
