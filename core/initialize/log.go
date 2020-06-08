@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"io"
 	"os"
-	"seckill/config"
 	"seckill/global"
+	"seckill/resources"
 	"seckill/utils"
 	"strings"
 	"time"
@@ -38,7 +38,7 @@ func logInit() {
 	global.LOG = logger
 }
 
-func registerStdout(c config.Log, backends []oplogging.Backend) []oplogging.Backend {
+func registerStdout(c resources.Log, backends []oplogging.Backend) []oplogging.Backend {
 	if c.Stdout != "" {
 		level, err := oplogging.LogLevel(c.Stdout)
 		if err != nil {
@@ -50,7 +50,7 @@ func registerStdout(c config.Log, backends []oplogging.Backend) []oplogging.Back
 	return backends
 }
 
-func registerFile(c config.Log, backends []oplogging.Backend) []oplogging.Backend {
+func registerFile(c resources.Log, backends []oplogging.Backend) []oplogging.Backend {
 	if c.File != "" {
 		if ok, _ := utils.PathExists(logDir); !ok {
 			// directory not exist
@@ -80,7 +80,7 @@ func registerFile(c config.Log, backends []oplogging.Backend) []oplogging.Backen
 	return backends
 }
 
-func createBackend(w io.Writer, c config.Log, level oplogging.Level) oplogging.Backend {
+func createBackend(w io.Writer, c resources.Log, level oplogging.Level) oplogging.Backend {
 	backend := oplogging.NewLogBackend(w, c.Prefix, 0)
 	stdoutWriter := false
 	if w == os.Stdout {
@@ -92,7 +92,7 @@ func createBackend(w io.Writer, c config.Log, level oplogging.Level) oplogging.B
 	return backendLeveled
 }
 
-func getLogFormatter(c config.Log, stdoutWriter bool) oplogging.Formatter {
+func getLogFormatter(c resources.Log, stdoutWriter bool) oplogging.Formatter {
 	pattern := defaultFormatter
 	if !stdoutWriter {
 		// Color is only required for console output

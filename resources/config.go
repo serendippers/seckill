@@ -1,4 +1,4 @@
-package config
+package resources
 
 type Server struct {
 	BizMySQL    `json:"bizMysql" yml:"bizMysql"`
@@ -57,7 +57,7 @@ type RedisPrefix struct {
 	SeckillStock string `json:"seckillStock" yml:"seckillStock"`
 }
 
+
 type Exchange struct {
 	Name string `json:"name" yml:"name"`
-
 }

@@ -7,7 +7,7 @@ import (
 	"seckill/global"
 )
 
-const defaultConfigFile = "config/config.yml"
+const defaultConfigFile = "resources/config.yml"
 
 /**
 同一个包下init按文件顺序来执行 viper的init方法必须先执行
@@ -31,6 +31,7 @@ func init() {
 		fmt.Println(err)
 	}
 	global.VIPER = v
+	fmt.Printf("init VIPER finish, global.VIPER is %v\n", global.VIPER)
 
 	//初始化log配置
 	logInit()
