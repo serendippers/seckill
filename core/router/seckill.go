@@ -10,7 +10,7 @@ func InitSeckillRouter(apiGroup *gin.RouterGroup) {
 	productRouter := apiGroup.Group("seckill").Use(middleware.JWTAuth())
 	{
 		productRouter.GET("/list", api.SeckillProductList)
-		productRouter.POST("/do-seckill", api.Seckill)
+		productRouter.POST("/seckill", api.Seckill)
 
 	}
 }

@@ -7,22 +7,18 @@ import (
 	"github.com/spf13/viper"
 	"github.com/streadway/amqp"
 	"github.com/zheng-ji/goSnowFlake"
-	"seckill/resources"
+	"seckill/config"
 )
 
-type RedisLua struct {
-	Path string
-	Sha  string
-}
-
+// 类似于springboot中的bean
 var (
-	BIZ_DB   *gorm.DB
-	RO_DB    *gorm.DB
-	REDIS    *redis.Client
-	CONFIG   resources.Server
-	LOG      *logging.Logger
-	VIPER    *viper.Viper
-	IdWorker *goSnowFlake.IdWorker
-	MQ       *amqp.Connection
-	LuaMap   *map[string]*RedisLua
+	BIZ_DB         *gorm.DB
+	RO_DB          *gorm.DB
+	REDIS          *redis.Client
+	CONFIG         config.Server
+	LOG            *logging.Logger
+	VIPER          *viper.Viper
+	IdWorker       *goSnowFlake.IdWorker
+	MQ             *amqp.Connection
+	LUA_MAP        *map[string]*config.RedisLua
 )

@@ -1,13 +1,14 @@
-package resources
+package config
 
 type Server struct {
-	BizMySQL    `json:"bizMysql" yml:"bizMysql"`
-	Redis       `json:"redis" yml:"redis"`
-	Log         `json:"log" yml:"log"`
-	RoMySQL     `json:"roMysql" yml:"roMysql"`
-	JWT         `json:"jwt" yml:"jwt"`
-	RabbitMQ    `json:"rabbitMQ" yml:"rabbitMQ"`
-	RedisPrefix `json:"redisPrefix" yml:"redisPrefix"`
+	BizMySQL            `json:"bizMysql" yml:"bizMysql"`
+	Redis               `json:"redis" yml:"redis"`
+	Log                 `json:"log" yml:"log"`
+	RoMySQL             `json:"roMysql" yml:"roMysql"`
+	JWT                 `json:"jwt" yml:"jwt"`
+	RabbitMQ            `json:"rabbitMQ" yml:"rabbitMQ"`
+	RedisPrefix         `json:"redisPrefix" yml:"redisPrefix"`
+	OrderConsumerConfig `json:"OrderConsumerConfig" yml:"consumer.order"`
 }
 
 type BizMySQL struct {
@@ -57,7 +58,15 @@ type RedisPrefix struct {
 	SeckillStock string `json:"seckillStock" yml:"seckillStock"`
 }
 
+type RedisLua struct {
+	Path string
+	Sha  string
+}
 
-type Exchange struct {
-	Name string `json:"name" yml:"name"`
+type OrderProducer struct {
+}
+
+type OrderConsumerConfig struct {
+	Number    int    `json:"number" yml:"number"`
+	QueueName string `json:"queueName" yml:"queueName"`
 }

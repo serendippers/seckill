@@ -58,15 +58,14 @@ rabbitMQ:
   path: 'amqp://root:root@0.0.0.0:5672/'
 #  port: ''
 
-app:
-  seckill:
-    queue:
-      poolSize: 4
-      name: 'create-order-queue'
-      routing-key: '1'
-    exchange:
-      name: "create-order-exchange"
-      type: 'direct'
+
+consumer:
+  order:
+    # 消费者个数
+    number: 10
+    queueName: 'order-queue'
+
+
 
 
 

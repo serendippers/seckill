@@ -1,8 +1,10 @@
 package service
 
 import (
+	"encoding/json"
 	"seckill/core/model"
 	"seckill/core/model/request"
+	"seckill/core/producer"
 	"seckill/global"
 	"strconv"
 	"sync"
@@ -59,11 +61,9 @@ func Seckill(info *request.OrderInfo) (message string, ok bool) {
 		productCache.Store(info.ProductId, true)
 		return message, ok
 	}
-
-	//TODO 将到达这里的请求放入消息队列
-
-
-
-
+	msgJson ,_ := json.Marshal(info)
+	producer.ORDER_PRODUCER.SendMessage(msgJson)
+	ok = true
+	message = "已进入秒杀队列"
 	return message, ok
 }

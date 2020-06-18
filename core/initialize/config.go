@@ -31,7 +31,7 @@ func init() {
 		fmt.Println(err)
 	}
 	global.VIPER = v
-	fmt.Printf("init VIPER finish, global.VIPER is %v\n", global.VIPER)
+	//fmt.Printf("init VIPER finish, global.VIPER is %v\n", global.VIPER)
 
 	//初始化log配置
 	logInit()

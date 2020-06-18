@@ -3,6 +3,7 @@ package initialize
 import (
 	"github.com/go-redis/redis"
 	"io/ioutil"
+	"seckill/config"
 	"seckill/core/model"
 	"seckill/global"
 	"strconv"
@@ -52,13 +53,13 @@ func CacheProduct() {
 
 //将lua脚本缓存至redis中
 func loadLuaScript()  {
-	luaMap := make(map[string]*global.RedisLua)
+	luaMap := make(map[string]*config.RedisLua)
 
 	//配置lua脚本的路径
 	//秒杀lua脚本
-	luaMap["seckill"] = &global.RedisLua{Path: "resources/lua/seckill.lua"}
+	luaMap["seckill"] = &config.RedisLua{Path: "resources/lua/seckill.lua"}
 	//限流lua脚本
-	luaMap["limiter"] = &global.RedisLua{Path: "resources/lua/limiter.lua"}
+	luaMap["limiter"] = &config.RedisLua{Path: "resources/lua/limiter.lua"}
 	for k,v := range luaMap {
 		date, err := ioutil.ReadFile(v.Path)
 		if err != nil {
@@ -70,10 +71,10 @@ func loadLuaScript()  {
 			panic("缓存脚本到Redis失败")
 		} else {
 			v.Sha = result
-			global.LOG.Infof("%s 对应的sha: %s\n", k, result)
+			global.LOG.Infof("%s 对应的sha: %s", k, result)
 		}
 	}
-	global.LuaMap = &luaMap
+	global.LUA_MAP = &luaMap
 	global.LOG.Info("LoadLuaScript success")
 }
 
