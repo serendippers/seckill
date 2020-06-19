@@ -20,11 +20,11 @@ func (order *OrderConsumer) ConsumerInit(queueName *string, consumer *string) {
 
 	q, err := ch.QueueDeclare(
 		*queueName,
-		true,  //持久
+		true,  //是否持久
 		false, //不使用时删除
-		false,
-		false,
-		nil,
+		false, //是否具有排他性
+		false, //是否阻塞
+		nil,   //额外属性
 	)
 
 	if err != nil {
@@ -32,8 +32,8 @@ func (order *OrderConsumer) ConsumerInit(queueName *string, consumer *string) {
 	}
 
 	err = ch.Qos(
-		1,
-		0,
+		1, //预取计数
+		0, //预取大小
 		false,
 	)
 
@@ -43,26 +43,26 @@ func (order *OrderConsumer) ConsumerInit(queueName *string, consumer *string) {
 
 	msgs, err := ch.Consume(
 		q.Name,
-		*consumer,
-		false,
-		false,
-		false,
-		false,
+		*consumer, //消费者名字
+		false,     //是否自动应答
+		false,     //是否具有排他性
+		false,     // 如果设置为true，表示不能将同一个connection中发送的消息传递给这个connection中的消费者
+		false,     // 队列消费是否阻塞
 		nil,
 	)
 
 	if err != nil {
 		global.LOG.Errorf("Failed to register a consumer, consumer is %s, err is %v", consumer, err)
 	}
-	forever := make(chan bool)
 
-	go func() {
-		for d := range msgs {
-			global.LOG.Info("Received a message: %s", d.Body)
-			time.Sleep(10 * time.Second)
-			_ = d.Ack(false)
-		}
-	}()
+	global.LOG.Infof("init %s success", *consumer)
+	//forever := make(chan bool)
 
-	<-forever
+	for d := range msgs {
+		global.LOG.Info("Received a message: %s, consumer is %s", d.Body, *consumer)
+		time.Sleep(10 * time.Second)
+		_ = d.Ack(false)
+	}
+
+	//<-forever
 }

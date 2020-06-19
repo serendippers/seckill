@@ -22,17 +22,17 @@ func InitRabbitMQ() {
 	}
 
 	orderConsumer := new(consumer.OrderConsumer)
-	startTask(orderConsumer, global.CONFIG.OrderConsumerConfig.QueueName, global.CONFIG.OrderConsumerConfig.Number)
+	startTask(orderConsumer, global.CONFIG.ConsumerConfig.OrderQueueName, global.CONFIG.ConsumerConfig.OrderPoolSize)
 	orderProducer := new(producer.OrderProducer)
-	orderProducer.ProducerInit(global.CONFIG.OrderConsumerConfig.QueueName)
+	orderProducer.ProducerInit(global.CONFIG.ConsumerConfig.OrderQueueName)
 
 }
 
-func startTask(consumer consumer.IMessageConsumer, name string, poolSize int) {
+func startTask(consumer consumer.IMessageConsumer, queueNqme string, poolSize int) {
 
 	for i := 0; i < poolSize; i++ {
-		consumerName := fmt.Sprintf("%s:%d", name, i)
-		consumer.ConsumerInit(&name, &consumerName)
+		consumerName := fmt.Sprintf("%s:%d", queueNqme, i)
+		go consumer.ConsumerInit(&queueNqme, &consumerName)
 
 	}
 }

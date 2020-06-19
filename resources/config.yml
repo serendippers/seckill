@@ -59,11 +59,9 @@ rabbitMQ:
 #  port: ''
 
 
-consumer:
-  order:
-    # 消费者个数
-    number: 10
-    queueName: 'order-queue'
+consumerConfig:
+  orderPoolSize: 10
+  orderQueueName: 'order-queue'
 
 
 

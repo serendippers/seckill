@@ -8,7 +8,7 @@ type Server struct {
 	JWT                 `json:"jwt" yml:"jwt"`
 	RabbitMQ            `json:"rabbitMQ" yml:"rabbitMQ"`
 	RedisPrefix         `json:"redisPrefix" yml:"redisPrefix"`
-	OrderConsumerConfig `json:"OrderConsumerConfig" yml:"consumer.order"`
+	ConsumerConfig `json:"consumerConfig" yml:"consumerConfig"`
 }
 
 type BizMySQL struct {
@@ -30,7 +30,7 @@ type RoMySQL struct {
 	Config       string `json:"config" yml:"config"`
 	MaxIdleConns int    `json:"maxIdleConns" yml:"maxIdleConns"`
 	MaxOpenConns int    `json:"maxOpenConns" yml:"maxOpenConns"`
-	LogMode      bool   `json:"logMode" yml:"log-mode"`
+	LogMode      bool   `json:"logMode" yml:"logMode"`
 }
 
 type Redis struct {
@@ -66,7 +66,7 @@ type RedisLua struct {
 type OrderProducer struct {
 }
 
-type OrderConsumerConfig struct {
-	Number    int    `json:"number" yml:"number"`
-	QueueName string `json:"queueName" yml:"queueName"`
+type ConsumerConfig struct {
+	OrderPoolSize  int    `json:"orderPoolSize" yml:"orderPoolSize"`
+	OrderQueueName string `json:"orderQueueName" yml:"orderQueueName"`
 }
