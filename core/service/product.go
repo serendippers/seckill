@@ -40,9 +40,13 @@ func SeckillProductList(pageInfo *request.PageInfo) (err error, list interface{}
 }
 
 //暂时返回是否成功
+//这里也可以换成lua脚本
 func Seckill(info *request.OrderInfo) (message string, ok bool) {
 	message = "秒杀失败"
 	ok = false
+	if info.ProductId == 0 || info.UserId == 0 || info.DeliveryAddrId == 0 {
+		message = "无效的参数"
+	}
 	if _, ok = productCache.Load(info.ProductId); ok {
 		global.LOG.Warning("Seckill over\n")
 		message = "商品已经秒杀完毕"

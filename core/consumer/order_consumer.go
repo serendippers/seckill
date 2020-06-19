@@ -1,8 +1,10 @@
 package consumer
 
 import (
+	"encoding/json"
+	"seckill/core/model/request"
+	"seckill/core/service"
 	"seckill/global"
-	"time"
 )
 
 type OrderConsumer struct {
@@ -60,8 +62,14 @@ func (order *OrderConsumer) ConsumerInit(queueName *string, consumer *string) {
 
 	for d := range msgs {
 		global.LOG.Info("Received a message: %s, consumer is %s", d.Body, *consumer)
-		time.Sleep(10 * time.Second)
-		_ = d.Ack(false)
+		orderInfo := request.OrderInfo{}
+		err = json.Unmarshal(d.Body, &orderInfo)
+		if err != nil {
+			service.CreateOrder(&orderInfo)
+			_ = d.Ack(false)
+		} else {
+			global.LOG.Errorf("json to struct err， cunsumer is %s, err is %v", *consumer, err)
+		}
 	}
 
 	//<-forever

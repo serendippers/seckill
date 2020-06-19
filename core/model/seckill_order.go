@@ -7,7 +7,7 @@ type SeckillOrder struct {
 	CreatedAt time.Time
 	UpdatedAt time.Time
 	DeletedAt *time.Time `sql:"index"`
-	UserId    int64        `json:"user_id" gorm:"type:bigint(64);DEFAULT NULL; COMMENT:'用户ID';unique_index:u_uid_gid"`
-	OrderId   int64        `json:"user_id" gorm:"type:bigint(64);DEFAULT NULL; COMMENT:'订单ID'"`
-	Product   int64        `json:"user_id" gorm:"type:bigint(64);DEFAULT NULL; COMMENT:'产品ID';unique_index:u_uid_gid"`
+	UserId    int64      `json:"user_id" gorm:"type:bigint(64);DEFAULT NULL; COMMENT:'用户ID'"`
+	OrderId   int64      `json:"order_id" gorm:"type:bigint(64);DEFAULT NULL; COMMENT:'订单ID'"`
+	ProductId int64      `json:"product_id" gorm:"type:bigint(64);DEFAULT NULL; COMMENT:'产品ID'"`
 }

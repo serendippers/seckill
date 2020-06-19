@@ -13,6 +13,7 @@ func CreateTables() {
 		model.OrderInfo{},
 		model.SeckillOrder{},
 		model.SeckillProduct{},
+		model.DeliveryAddr{},
 	)
 	global.LOG.Debug("register table success")
 }
