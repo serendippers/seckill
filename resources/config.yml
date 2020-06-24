@@ -63,6 +63,12 @@ consumerConfig:
   orderPoolSize: 10
   orderQueueName: 'order-queue'
 
+  payPoolSize: 1
+  payQueueName: 'pay-queue'
+
+  dlxPoolSize: 5
+  dlxQueueName: 'dlx-queue'
+
 
 
 

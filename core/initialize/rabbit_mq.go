@@ -21,10 +21,17 @@ func InitRabbitMQ() {
 		global.LOG.Info("init RabbitMQ success")
 	}
 
+	//TODO 定义消费者的函数可以独立出来，将要执行的方法当成参数传入
+	//订单生产者，请求通过redis扣减库存，通过orderProducer生产数据
+	orderProducer := new(producer.OrderProducer)
+	orderProducer.ProducerInit(&global.CONFIG.ConsumerConfig)
+	//消费orderProducer产生的消息，检测库存，生成订单，购买记录
 	orderConsumer := new(consumer.OrderConsumer)
 	startTask(orderConsumer, global.CONFIG.ConsumerConfig.OrderQueueName, global.CONFIG.ConsumerConfig.OrderPoolSize)
-	orderProducer := new(producer.OrderProducer)
-	orderProducer.ProducerInit(global.CONFIG.ConsumerConfig.OrderQueueName)
+
+
+	dlxConsumer := new(consumer.DlxConsumer)
+	startTask(dlxConsumer, global.CONFIG.ConsumerConfig.DlxQueueName, global.CONFIG.ConsumerConfig.DlxPoolSize)
 
 }
 
@@ -37,42 +44,3 @@ func startTask(consumer consumer.IMessageConsumer, queueNqme string, poolSize in
 	}
 }
 
-//func TestRabbitMQInit() {
-//	//创建通道
-//	ch, err := global.MQ.Channel()
-//	if err != nil {
-//		global.LOG.Errorf("无法打开通道，error is %s\n", err)
-//	}
-//	defer ch.Close()
-//
-//	q, err := ch.QueueDeclare(
-//		"hello",
-//		false,
-//		false,
-//		false,
-//		false,
-//		nil)
-//
-//	if err != nil {
-//		global.LOG.Errorf("无法声明队列，err is %s\n", err)
-//	}
-//
-//	body := "hello world!"
-//
-//	err = ch.Publish(
-//		"",
-//		q.Name,
-//		false,
-//		false,
-//		amqp.Publishing{
-//			ContentType: "text/plain",
-//			Body:        []byte(body),
-//		})
-//	if err != nil {
-//		global.LOG.Errorf("Failed to publish a message, error is %s\n", err)
-//	}
-//}
-//
-//func seckillConsumer() {
-//
-//}

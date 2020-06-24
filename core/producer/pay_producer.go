@@ -4,17 +4,21 @@ import (
 	"github.com/streadway/amqp"
 	"seckill/config"
 	"seckill/global"
+	"time"
 )
 
-var ORDER_PRODUCER *OrderProducer
+var PAY_PRODUCER *PayProducer
 
-type OrderProducer struct {
+type PayProducer struct {
 	channel      *amqp.Channel
 	queueName    string
 	exchangeName string
+	exchangeType string
+	dlxQueueName string
 }
 
-func (producer *OrderProducer) ProducerInit(config *config.ConsumerConfig) {
+//初始化生产者（处理支付的延迟队列）
+func (producer *PayProducer) ProducerInit(config *config.ConsumerConfig) {
 	ch, err := global.MQ.Channel()
 
 	if err != nil {
@@ -23,11 +27,12 @@ func (producer *OrderProducer) ProducerInit(config *config.ConsumerConfig) {
 	}
 	producer.channel = ch
 	producer.queueName = config.OrderQueueName
+	producer.dlxQueueName = config.PayDlxQueueName
 
-	ORDER_PRODUCER = producer
+	PAY_PRODUCER = producer
 }
 
-func (producer *OrderProducer) SendMessage(message []byte) {
+func (producer *PayProducer) SendMessage(message []byte) {
 
 	q, err := producer.channel.QueueDeclare(
 		producer.queueName, //名称
@@ -42,6 +47,10 @@ func (producer *OrderProducer) SendMessage(message []byte) {
 		global.LOG.Errorf("Failed to declare a queue, queue is %s ,error is %v", producer.queueName, err)
 	}
 
+	//if err = producer.prepareExchange(); err != nil {
+	//	global.LOG.Errorf("Failed to declare a exchange, exchange is %s ,error is %v", producer.exchangeName, err)
+	//}
+
 	err = producer.channel.Publish(
 		producer.exchangeName,
 		q.Name,
@@ -50,8 +59,22 @@ func (producer *OrderProducer) SendMessage(message []byte) {
 		amqp.Publishing{
 			ContentType: "application/json",
 			Body:        message,
+			Expiration:  string(30 * time.Minute.Milliseconds()),//设置消息30分钟过期
 		})
 	if err != nil {
 		global.LOG.Errorf("Failed to send message, queue is %s ,error is %v", producer.queueName, err)
 	}
+
+}
+
+func (producer *PayProducer) prepareExchange() error {
+	return producer.channel.ExchangeDeclare(
+		producer.exchangeName,
+		producer.exchangeType,
+		true,
+		false,
+		false,
+		false,
+		nil,
+	)
 }

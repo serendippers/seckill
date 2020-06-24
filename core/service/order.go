@@ -6,6 +6,7 @@ import (
 	"seckill/global"
 )
 
+//创建订单
 func CreateOrder(order *request.OrderInfo) (message string, code int) {
 	message = "生成订单失败"
 	code = 7
@@ -14,7 +15,7 @@ func CreateOrder(order *request.OrderInfo) (message string, code int) {
 		First(&district).RecordNotFound()
 	if isInvalid {
 		global.LOG.Errorf("Invalid deliveryAddr, order is %v", order)
-		//TODO 增加redis库存
+		return message, code
 	}
 	orderInfoId, err := global.IdWorker.NextId()
 	if err != nil {
@@ -44,7 +45,6 @@ func CreateOrder(order *request.OrderInfo) (message string, code int) {
 	if err != nil {
 		global.LOG.Errorf("create seckillOrder err, error is %v", err)
 		global.BIZ_DB.Rollback()
-		//TODO 这么多地方需要return，并且redis库存加一，太啰嗦了，怎么办？？？？
 		return message, code
 	}
 

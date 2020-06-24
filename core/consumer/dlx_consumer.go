@@ -3,14 +3,14 @@ package consumer
 import (
 	"encoding/json"
 	"seckill/core/model/request"
-	"seckill/core/service"
 	"seckill/global"
 )
 
-type OrderConsumer struct {
+type DlxConsumer struct {
 }
 
-func (order *OrderConsumer) ConsumerInit(queueName *string, consumer *string) {
+//消费死信队列（延迟队列，存放的是过期的订单数据）
+func (dlx *DlxConsumer) ConsumerInit(queueName *string, consumer *string) {
 
 	ch, err := global.MQ.Channel()
 
@@ -64,7 +64,8 @@ func (order *OrderConsumer) ConsumerInit(queueName *string, consumer *string) {
 		orderInfo := request.OrderInfo{}
 		err = json.Unmarshal(d.Body, &orderInfo)
 		if err != nil {
-			service.CreateOrder(&orderInfo)
+			// TODO 检查订单是否支付过
+			global.LOG.Info("消费一个过期订单")
 		} else {
 			global.LOG.Errorf("json to struct err， cunsumer is %s, err is %v", *consumer, err)
 		}
