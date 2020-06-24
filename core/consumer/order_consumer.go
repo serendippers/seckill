@@ -3,6 +3,7 @@ package consumer
 import (
 	"encoding/json"
 	"seckill/core/model/request"
+	"seckill/core/producer"
 	"seckill/core/service"
 	"seckill/global"
 )
@@ -63,8 +64,11 @@ func (order *OrderConsumer) ConsumerInit(queueName *string, consumer *string) {
 		global.LOG.Info("Received a message: %s, consumer is %s", d.Body, *consumer)
 		orderInfo := request.OrderInfo{}
 		err = json.Unmarshal(d.Body, &orderInfo)
-		if err != nil {
-			service.CreateOrder(&orderInfo)
+		if err == nil {
+			if _, code := service.CreateOrder(&orderInfo); code == 0 {
+				msgJson ,_ := json.Marshal("ceshi")
+				producer.PAY_PRODUCER.SendMessage(msgJson)
+			}
 		} else {
 			global.LOG.Errorf("json to struct err， cunsumer is %s, err is %v", *consumer, err)
 		}

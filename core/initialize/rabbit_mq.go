@@ -29,6 +29,9 @@ func InitRabbitMQ() {
 	orderConsumer := new(consumer.OrderConsumer)
 	startTask(orderConsumer, global.CONFIG.ConsumerConfig.OrderQueueName, global.CONFIG.ConsumerConfig.OrderPoolSize)
 
+	payProducer := new(producer.PayProducer)
+	payProducer.ProducerInit(&global.CONFIG.ConsumerConfig)
+
 
 	dlxConsumer := new(consumer.DlxConsumer)
 	startTask(dlxConsumer, global.CONFIG.ConsumerConfig.DlxQueueName, global.CONFIG.ConsumerConfig.DlxPoolSize)

@@ -20,6 +20,20 @@ func (dlx *DlxConsumer) ConsumerInit(queueName *string, consumer *string) {
 	}
 	defer ch.Close()
 
+	err = ch.ExchangeDeclare(
+		"dlx_exchange",
+		"direct",
+		true,
+		false,
+		false,
+		false,
+		nil,
+	)
+	if err != nil {
+		global.LOG.Errorf("Failed to declare a exchange, Exchange is %s ,error is %v", "dlx_exchange", err)
+		return
+	}
+
 	q, err := ch.QueueDeclare(
 		*queueName,
 		true,  //是否持久
@@ -31,6 +45,12 @@ func (dlx *DlxConsumer) ConsumerInit(queueName *string, consumer *string) {
 
 	if err != nil {
 		global.LOG.Errorf("Failed to declare a queue, queue is %s ,error is %v", queueName, err)
+		return
+	}
+
+	if err = ch.QueueBind(*queueName, "", "dlx_exchange", false, nil); err != nil {
+		global.LOG.Error("Failed to queueBind", err)
+		return
 	}
 
 	err = ch.Qos(
@@ -41,6 +61,7 @@ func (dlx *DlxConsumer) ConsumerInit(queueName *string, consumer *string) {
 
 	if err != nil {
 		global.LOG.Errorf("Failed to set QoS, err is %v", err)
+		return
 	}
 
 	msgs, err := ch.Consume(
@@ -55,6 +76,7 @@ func (dlx *DlxConsumer) ConsumerInit(queueName *string, consumer *string) {
 
 	if err != nil {
 		global.LOG.Errorf("Failed to register a consumer, consumer is %s, err is %v", consumer, err)
+		return
 	}
 
 	global.LOG.Infof("init %s success", *consumer)
@@ -63,7 +85,7 @@ func (dlx *DlxConsumer) ConsumerInit(queueName *string, consumer *string) {
 		global.LOG.Info("Received a message: %s, consumer is %s", d.Body, *consumer)
 		orderInfo := request.OrderInfo{}
 		err = json.Unmarshal(d.Body, &orderInfo)
-		if err != nil {
+		if err == nil {
 			// TODO 检查订单是否支付过
 			global.LOG.Info("消费一个过期订单")
 		} else {

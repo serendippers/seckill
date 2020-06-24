@@ -4,7 +4,6 @@ import (
 	"github.com/streadway/amqp"
 	"seckill/config"
 	"seckill/global"
-	"time"
 )
 
 var PAY_PRODUCER *PayProducer
@@ -27,12 +26,16 @@ func (producer *PayProducer) ProducerInit(config *config.ConsumerConfig) {
 	}
 	producer.channel = ch
 	producer.queueName = config.OrderQueueName
-	producer.dlxQueueName = config.PayDlxQueueName
+	producer.dlxQueueName = config.DlxQueueName
 
 	PAY_PRODUCER = producer
 }
 
 func (producer *PayProducer) SendMessage(message []byte) {
+
+	argsQue := make(map[string]interface{})
+	argsQue["x-dead-letter-exchange"] = "dlx_exchange"
+
 
 	q, err := producer.channel.QueueDeclare(
 		producer.queueName, //名称
@@ -40,7 +43,7 @@ func (producer *PayProducer) SendMessage(message []byte) {
 		false,              //不用时删除
 		false,              //排他性
 		false,              //不等待
-		nil,                //参数
+		argsQue,                //参数
 	)
 
 	if err != nil {
@@ -59,7 +62,8 @@ func (producer *PayProducer) SendMessage(message []byte) {
 		amqp.Publishing{
 			ContentType: "application/json",
 			Body:        message,
-			Expiration:  string(30 * time.Minute.Milliseconds()),//设置消息30分钟过期
+			//Expiration:  string(30 * time.Minute.Milliseconds()),//设置消息30分钟过期
+			Expiration:  "6000",
 		})
 	if err != nil {
 		global.LOG.Errorf("Failed to send message, queue is %s ,error is %v", producer.queueName, err)

@@ -15,5 +15,5 @@ type OrderInfo struct {
 	ProductPrice   float32    `json:"price" gorm:"type:decimal(10,2); DEFAULT '0.00'; COMMENT:'商品单价'"`
 	OrderChannel   int        `json:"order_channel" gorm:"type:tinyint(4);DEFAULT 0; COMMENT:'1pc，2android，3ios'"`
 	Status         int        `json:"status" gorm:"type:tinyint(4);DEFAULT 0;COMMENT:'订单状态，0新建未支付，1已支付，2已发货，3已收货，4已退款，5已完成'"`
-	PayDate        time.Time  `json:"pay_date" gorm:"type:datetime;DEFAULT NULL; COMMENT: '支付时间'"`
+	PayDate        time.Time  `json:"pay_date" gorm:"default:NULL;type:datetime;DEFAULT NULL; COMMENT: '支付时间'"`
 }

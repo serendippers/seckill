@@ -13,7 +13,7 @@ func CreateOrder(order *request.OrderInfo) (message string, code int) {
 	var district model.DeliveryAddr
 	isInvalid := global.RO_DB.Where("user_id = ? and district_id = ?", order.UserId, order.DeliveryAddrId).
 		First(&district).RecordNotFound()
-	if isInvalid {
+	if !isInvalid {
 		global.LOG.Errorf("Invalid deliveryAddr, order is %v", order)
 		return message, code
 	}
@@ -25,8 +25,10 @@ func CreateOrder(order *request.OrderInfo) (message string, code int) {
 	var product model.Product
 	var seckillProduct model.SeckillProduct
 
+	seckillOrderId, _ :=global.IdWorker.NextId()
 	//创建
 	seckillOrder := model.SeckillOrder{
+		Id: seckillOrderId,
 		UserId:    order.UserId,
 		ProductId: order.ProductId,
 		OrderId:   orderInfoId,
@@ -87,7 +89,10 @@ func CreateOrder(order *request.OrderInfo) (message string, code int) {
 		global.BIZ_DB.Rollback()
 		return message, code
 	}
-	global.BIZ_DB.Commit()
+	err = global.BIZ_DB.Commit().Error
+	if err !=nil {
+		global.LOG.Error(err)
+	}
 	message = "创建订单成功"
 	code = 0
 
