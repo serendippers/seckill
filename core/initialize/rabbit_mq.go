@@ -38,11 +38,11 @@ func InitRabbitMQ() {
 
 }
 
-func startTask(consumer consumer.IMessageConsumer, queueNqme string, poolSize int) {
+func startTask(consumer consumer.IMessageConsumer, queueName string, poolSize int) {
 
 	for i := 0; i < poolSize; i++ {
-		consumerName := fmt.Sprintf("%s:%d", queueNqme, i)
-		go consumer.ConsumerInit(&queueNqme, &consumerName)
+		consumerName := fmt.Sprintf("%s:%d", queueName, i)
+		go consumer.ConsumerInit(&queueName, &consumerName)
 
 	}
 }

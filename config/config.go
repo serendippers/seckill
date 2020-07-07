@@ -74,6 +74,8 @@ type ConsumerConfig struct {
 	PayQueueName string `json:"payQueueName" yml:"payQueueName"`
 	//PayDlxQueueName string `json:"payDlxQueueName" yml:"payDlxQueueName"`
 
-	DlxPoolSize  int    `json:"dlxPoolSize" yml:"dlxPoolSize"`
-	DlxQueueName string `json:"dlxQueueName" yml:"dlxQueueName"`
+	DlxPoolSize     int    `json:"dlxPoolSize" yml:"dlxPoolSize"`
+	DlxQueueName    string `json:"dlxQueueName" yml:"dlxQueueName"`
+	DlxExchangeName string `json:"dlxExchangeName" yml:"dlxExchangeName"`
+	DlxExchangeType string `json:"dlxExchangeType" yml:"dlxExchangeType"`
 }

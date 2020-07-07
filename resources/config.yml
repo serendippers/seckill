@@ -68,6 +68,8 @@ consumerConfig:
 
   dlxPoolSize: 5
   dlxQueueName: 'dlx-queue'
+  DlxExchangeName: 'dlx-exchange'
+  DlxExchangeType: 'fanout'
 
 
 

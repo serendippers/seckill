@@ -1,6 +1,8 @@
 package producer
 
 import (
+	"errors"
+	"fmt"
 	"github.com/streadway/amqp"
 	"seckill/config"
 	"seckill/global"
@@ -9,11 +11,13 @@ import (
 var PAY_PRODUCER *PayProducer
 
 type PayProducer struct {
-	channel      *amqp.Channel
-	queueName    string
-	exchangeName string
-	exchangeType string
-	dlxQueueName string
+	channel         *amqp.Channel
+	queueName       string
+	exchangeName    string
+	exchangeType    string
+	dlxQueueName    string
+	dlxExchangeName string
+	dlxExchangeType string
 }
 
 //初始化生产者（处理支付的延迟队列）
@@ -27,32 +31,42 @@ func (producer *PayProducer) ProducerInit(config *config.ConsumerConfig) {
 	producer.channel = ch
 	producer.queueName = config.OrderQueueName
 	producer.dlxQueueName = config.DlxQueueName
+	producer.dlxExchangeName = config.DlxExchangeName
+	producer.dlxExchangeType = config.DlxExchangeType
 
 	PAY_PRODUCER = producer
 }
 
 func (producer *PayProducer) SendMessage(message []byte) {
 
-	argsQue := make(map[string]interface{})
-	argsQue["x-dead-letter-exchange"] = "dlx_exchange"
+	argsQue := amqp.Table{"x-dead-letter-exchange": producer.dlxExchangeName}
 
-
+	//设置存储订单的队列，并设置队列的死信交换机为 dlx_exchange
 	q, err := producer.channel.QueueDeclare(
 		producer.queueName, //名称
 		true,               //持久性
 		false,              //不用时删除
 		false,              //排他性
 		false,              //不等待
-		argsQue,                //参数
+		argsQue,            //参数
 	)
 
 	if err != nil {
 		global.LOG.Errorf("Failed to declare a queue, queue is %s ,error is %v", producer.queueName, err)
 	}
 
-	//if err = producer.prepareExchange(); err != nil {
-	//	global.LOG.Errorf("Failed to declare a exchange, exchange is %s ,error is %v", producer.exchangeName, err)
-	//}
+	//TODO 不应该在这里声明交换机，应把声明交换机这部分代码在优化一下
+	if err = producer.prepareExchange(producer.dlxExchangeName, producer.dlxExchangeType); err != nil {
+		global.LOG.Errorf("Failed to declare a exchange, exchange is %s ,error is %v", producer.dlxExchangeName, err)
+	}
+
+	err = producer.channel.QueueBind(
+		producer.dlxQueueName,//延时队列
+		"", // routing key
+		producer.dlxExchangeName,
+		false,
+		nil,
+	)
 
 	err = producer.channel.Publish(
 		producer.exchangeName,
@@ -63,18 +77,22 @@ func (producer *PayProducer) SendMessage(message []byte) {
 			ContentType: "application/json",
 			Body:        message,
 			//Expiration:  string(30 * time.Minute.Milliseconds()),//设置消息30分钟过期
-			Expiration:  "6000",
+			Expiration: "6000",
 		})
 	if err != nil {
 		global.LOG.Errorf("Failed to send message, queue is %s ,error is %v", producer.queueName, err)
 	}
-
 }
 
-func (producer *PayProducer) prepareExchange() error {
+//初始化交换机
+//TODO 这个方法还需要整理，不应该放在这里，应该提取出来作为一个公共的方法
+func (producer *PayProducer) prepareExchange(exchangeName, exchangeType string) error {
+	if exchangeName == "" || exchangeType == "" {
+		return errors.New(fmt.Sprintf("invalid param, exchangeName is %s, exchangeType is %s", exchangeName, exchangeType))
+	}
 	return producer.channel.ExchangeDeclare(
-		producer.exchangeName,
-		producer.exchangeType,
+		exchangeName,
+		exchangeType,
 		true,
 		false,
 		false,
